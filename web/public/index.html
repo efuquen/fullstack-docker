@@ -10,6 +10,7 @@
 <body>
     <div id="content"></div>
     <script type="text/babel">
+        var apiHost = '192.168.99.101';
         var Welcome = React.createClass({
             goBack: function() {
                 ReactDOM.render(<Login />, document.getElementById("content"));
@@ -35,10 +36,10 @@
         var Login = React.createClass({
             loginClick: function(e) {
                 var username = $("#username").val();
-                $.ajax("http://127.0.0.1:3000/user/" + username, {
+                $.ajax("http://" + apiHost + ":3000/user/" + username, {
                     statusCode: {
                         404: function() {
-                            $.ajax("http://127.0.0.1:3000/user/register", {
+                            $.ajax("http://" + apiHost + ":3000/user/register", {
                                 method: "POST",
                                 contentType: "application/json",
                                 data: JSON.stringify({username: username}),

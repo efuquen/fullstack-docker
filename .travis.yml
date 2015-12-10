@@ -12,4 +12,4 @@ before_install:
   - docker-compose up
 
 script:
-  - node test.js
+  - ./test.sh

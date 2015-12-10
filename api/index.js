@@ -64,6 +64,10 @@ app.get('/user/:username', function(req, res) {
     });
 });
 
+app.get('/hello', function(req, res) {
+    res.send('<h1>Hello, world!</h1>');
+})
+
 var port = config.get('Server.port');
 var server = http.Server(app);
 server.listen(port, function(){
