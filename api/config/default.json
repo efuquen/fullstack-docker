@@ -1,0 +1,9 @@
+{
+  "Server": {
+    "port": 3000
+  },
+  "Redis": {
+    "host": "redis",
+    "port": 6379
+  }
+}

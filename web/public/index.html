@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Fullstack Dockertitle</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+    <script type="text/babel">
+        var Welcome = React.createClass({
+            goBack: function() {
+                ReactDOM.render(<Login />, document.getElementById("content"));
+            },
+            render: function() {
+                var now = new Date();
+                var secondsCreated = (now.getTime() - new Date(this.props.user.date_created).getTime()) / 1000;
+                var greeting = (<h3>Welcome back {this.props.user.name}!</h3>)
+                if (this.props.user.new) {
+                    greeting = (<h3>Thanks for joining {this.props.user.name}!</h3>)
+                }
+                return (
+                    <div className="welcome">
+                        {greeting}
+                        <h3>User created on {this.props.user.date_created}</h3>
+                        <h3>The current time is {now.toISOString()}</h3>
+                        <h3>User was created {secondsCreated} seconds ago</h3>
+                        <button onClick={this.goBack}>Back</button>
+                    </div>
+                )
+            }
+        });
+        var Login = React.createClass({
+            loginClick: function(e) {
+                var username = $("#username").val();
+                $.ajax("http://127.0.0.1:3000/user/" + username, {
+                    statusCode: {
+                        404: function() {
+                            $.ajax("http://127.0.0.1:3000/user/register", {
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify({username: username}),
+                                success: function(user) {
+                                    user.name = username;
+                                    user.new = true;
+                                    ReactDOM.render(<Welcome user={user}/>, document.getElementById("content"));
+                                }
+                            });
+                        },
+                        200: function(user) {
+                            user.name = username;
+                            user.new = false;
+                            ReactDOM.render(<Welcome user={user}/>, document.getElementById("content"));
+                        }
+                    }
+                });
+            },
+            render: function() {
+                return (
+                    <div className="login">
+                        <input id="username" type="text" placeholder="Username"></input>
+                        <button onClick={this.loginClick}>Login</button>
+                    </div>
+                );
+            }
+        });
+        ReactDOM.render(
+            <Login />,
+            document.getElementById("content")
+        );
+    </script>
+</body>
+</html>
