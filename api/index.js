@@ -17,10 +17,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/hello', function(req, res){
-  res.send('<h1>Hello world</h1>');
-});
-
 var redisHost = config.get('Redis.host');
 var redisPort = config.get('Redis.port');
 var redisClient = redis.createClient(redisPort, redisHost);
@@ -66,10 +62,6 @@ app.get('/user/:username', function(req, res) {
         var user = JSON.parse(userVal);
         res.status(200).json(user);
     });
-});
-
-app.post('/notes/:username', function(req, res) {
-    
 });
 
 var port = config.get('Server.port');
